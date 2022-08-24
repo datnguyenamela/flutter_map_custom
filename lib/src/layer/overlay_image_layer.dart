@@ -19,13 +19,16 @@ class OverlayImage {
   final ImageProvider imageProvider;
   final double opacity;
   final bool gaplessPlayback;
+  final double rotateAngle;
+  final Alignment rotateAlignment;
 
-  OverlayImage({
-    required this.bounds,
-    required this.imageProvider,
-    this.opacity = 1.0,
-    this.gaplessPlayback = false,
-  });
+  OverlayImage(
+      {required this.bounds,
+      required this.imageProvider,
+      this.opacity = 1.0,
+      this.gaplessPlayback = false,
+      this.rotateAngle = 0,
+      this.rotateAlignment = Alignment.center});
 }
 
 class OverlayImageLayerWidget extends StatelessWidget {
@@ -81,12 +84,16 @@ class OverlayImageLayer extends StatelessWidget {
       top: upperLeftPixel.y.toDouble(),
       width: (bottomRightPixel.x - upperLeftPixel.x).toDouble(),
       height: (bottomRightPixel.y - upperLeftPixel.y).toDouble(),
-      child: Image(
-        image: overlayImage.imageProvider,
-        fit: BoxFit.fill,
-        color: Color.fromRGBO(255, 255, 255, overlayImage.opacity),
-        colorBlendMode: BlendMode.modulate,
-        gaplessPlayback: overlayImage.gaplessPlayback,
+      child: Transform.rotate(
+        angle: overlayImage.rotateAngle,
+        alignment: overlayImage.rotateAlignment,
+        child: Image(
+          image: overlayImage.imageProvider,
+          fit: BoxFit.fill,
+          color: Color.fromRGBO(255, 255, 255, overlayImage.opacity),
+          colorBlendMode: BlendMode.modulate,
+          gaplessPlayback: overlayImage.gaplessPlayback,
+        ),
       ),
     );
   }
